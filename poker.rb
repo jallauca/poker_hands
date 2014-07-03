@@ -34,6 +34,7 @@ def get_play_rank(cards)
               straight_rank(cards, score) ||
               three_of_kind_rank(cards, score) ||
               two_pair_rank(cards, score) ||
+              pair_rank(cards, score) ||
               [1]
   return play_rank + score
 end
@@ -47,6 +48,7 @@ def get_play_label(score)
     when 5 ; "Straight"
     when 4 ; "Three of a Kind"
     when 3 ; "Two Pairs"
+    when 2 ; "Pair"
     else ; "High Card"
   end
 end
@@ -87,6 +89,11 @@ end
 def two_pair_rank(cards, score)
   two_pairs = Set.new(score).find_all { |c| score.count(c) == 2 }
   [3] + two_pairs.sort.reverse if two_pairs.count == 2
+end
+
+def pair_rank(cards, score)
+  pair = Set.new(score).find_all { |c| score.count(c) == 2 }
+  [2] + pair if pair.count == 1
 end
 
 @indexed_cards = 
@@ -204,6 +211,7 @@ def get_play_rank_tests
   assert { get_play_rank([ '2H','3D','4H','5S','6C' ]) == [5,       6,5,4,3,2] }
   assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,     4,4,4,3,2] }
   assert { get_play_rank([ '8H','8D','4H','4S','5C' ]) == [3,8,4,   8,8,5,4,4] }
+  assert { get_play_rank([ '8H','8D','QH','4S','5C' ]) == [2,8,     12,8,8,5,4] }
 end
 
 class AssertionError < RuntimeError
