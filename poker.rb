@@ -2,12 +2,11 @@
 
 def input_to_hands(input)
   split_hands = input.scan(/\w+:(?:\s[0-9AJKQ][HDSC]){5}/)
-  split_hash = split_hands.reduce({ }) do |h, s|
+  split_hands.reduce({ }) do |h, s|
     name, cards = s.split(":")
     h[ name ] = cards.strip.split(" ")
     h
   end
-  split_hash
 end
 
 def script_main
