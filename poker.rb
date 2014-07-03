@@ -10,14 +10,38 @@ def input_to_hands(input)
 end
 
 def winner(hands)
-  hand_scores = hands.reduce({ }) do |memo, (name, cards)|
+  hand_scores = get_scores(hands)
+  won = hand_scores.max { |hand1, hand2| hand_comparison(hand1, hand2) }
+  "#{won[0]} - #{get_play_label(won[1])}"
+end
+
+def get_scores(hands)
+  hands.reduce({ }) do |memo, (name, cards)|
     score = get_cards(cards)
-    memo[name] = score
+    play_rank = get_play_rank(cards, score)
+    memo[name] = [play_rank] + score
+    # puts "#{cards} #{memo[name]}"
     memo
   end
+end
 
-  won = hand_scores.max { |hand1, hand2| hand_comparison(hand1, hand2) }
-  won[0]
+def get_play_rank(cards, score)
+  return 9 if is_straight_flush(cards, score)
+  return 1
+end
+
+def get_play_label(score)
+  case score[0]
+  when 9
+    "Straight Flush"
+  else
+    "High Card"
+  end
+end
+
+def is_straight_flush(cards, score)
+  cards.all? { |c| c[-1] == cards.first[-1] } &&
+  ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
 end
 
 @indexed_cards = 
@@ -66,6 +90,7 @@ end
 def show_tests
   input_to_hands_tests
   winner_tests
+  puts 'tests pass'
 end
 
 def input_to_hands_tests
@@ -97,13 +122,16 @@ def input_to_hands_tests
         'White' => [ '2D', '3H', '5C', '9S', 'KH' ]
       }
   end
-  puts 'tests pass'
 end
 
 def winner_tests
   assert do 
     w = winner(input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"))
-    w == "White"
+    w == "White - High Card"
+  end
+  assert do
+    w = winner(input_to_hands("Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH"))
+    w == "Black - Straight Flush"
   end
 end
 
