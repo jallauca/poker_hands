@@ -20,10 +20,14 @@ def winner(hands)
   won[0]
 end
 
-@indexed_cards = "0 1 2 3 4 5 6 7 8 9 10 J Q K A".split(" ")
+@indexed_cards = 
+  "0 1 2 3 4 5 6 7 8 9 10 J Q K A"
+  .split(" ")
+  .each_with_index
+  .reduce({ }) { |h, (n, i)| h[n] = i; h }
 
 def get_cards(cards)
-  cards.map { |c| @indexed_cards.index(c[0]) }.sort.reverse
+  cards.map { |c| @indexed_cards[ c[0] ] }.sort.reverse
 end
 
 def hand_comparison(hand1, hand2)
