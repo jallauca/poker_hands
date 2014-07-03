@@ -54,7 +54,8 @@ def script_main
   return show_tests if tests_flag
   return show_help unless ARGV.count == 1
 
-  input_to_hands(ARGV[0])
+  w = winner( input_to_hands(ARGV[0]) )
+  puts "#{w} wins"
 end
 
 def show_help
@@ -102,7 +103,6 @@ end
 def winner_tests
   assert do 
     w = winner(input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"))
-    puts "w wins"
     w == "White"
   end
 end
