@@ -33,6 +33,7 @@ def get_play_rank(cards)
               flush_rank(cards, score) ||
               straight_rank(cards, score) ||
               three_of_kind_rank(cards, score) ||
+              two_pair_rank(cards, score) ||
               [1]
   return play_rank + score
 end
@@ -44,6 +45,8 @@ def get_play_label(score)
     when 7 ; "Full House"
     when 6 ; "Flush"
     when 5 ; "Straight"
+    when 4 ; "Three of a Kind"
+    when 3 ; "Two Pairs"
     else ; "High Card"
   end
 end
@@ -79,6 +82,11 @@ end
 def three_of_kind_rank(cards, score)
   three_of_kind = Set.new(score).find { |c| score.count(c) == 3 }
   [4, three_of_kind] if three_of_kind
+end
+
+def two_pair_rank(cards, score)
+  two_pairs = Set.new(score).find_all { |c| score.count(c) == 2 }
+  [3] + two_pairs.sort.reverse if two_pairs.count == 2
 end
 
 @indexed_cards = 
@@ -182,15 +190,20 @@ def winner_tests
     w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H White: 2H 3D 4H 5S 6C"))
     w == "White - Straight"
   end
+  assert do
+    w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C"))
+    w == "Black - Three of a Kind"
+  end
 end
 
 def get_play_rank_tests
-  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == [9,6,5,4,3,2] }
-  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == [8,4,4,4,4,4,2] }
-  assert { get_play_rank([ '3C','3H','3S','8C','8H' ]) == [7,3,8,8,8,3,3,3] }
-  assert { get_play_rank([ '2H','4H','6H','8H','JH' ]) == [6,11,8,6,4,2] }
-  assert { get_play_rank([ '2H','3D','4H','5S','6C' ]) == [5,6,5,4,3,2] }
-  assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,4,4,4,3,2] }
+  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == [9,6,     5,4,3,2] }
+  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == [8,4,     4,4,4,4,2] }
+  assert { get_play_rank([ '3C','3H','3S','8C','8H' ]) == [7,3,8,   8,8,3,3,3] }
+  assert { get_play_rank([ '2H','4H','6H','8H','JH' ]) == [6,       11,8,6,4,2] }
+  assert { get_play_rank([ '2H','3D','4H','5S','6C' ]) == [5,       6,5,4,3,2] }
+  assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,     4,4,4,3,2] }
+  assert { get_play_rank([ '8H','8D','4H','4S','5C' ]) == [3,8,4,   8,8,5,4,4] }
 end
 
 class AssertionError < RuntimeError
