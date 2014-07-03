@@ -30,6 +30,7 @@ def get_play_rank(cards)
   play_rank = straight_flush_rank(cards, score) ||
               four_of_kind_rank(cards, score) ||
               full_house(cards, score) ||
+              flush_rank(cards, score) ||
               [1]
   return play_rank + score
 end
@@ -38,7 +39,8 @@ def get_play_label(score)
   case score[0]
     when 9 ; "Straight Flush"
     when 8 ; "Four of a Kind"
-    when 8 ; "Full House"
+    when 7 ; "Full House"
+    when 6 ; "Flush"
     else ; "High Card"
   end
 end
@@ -58,7 +60,12 @@ def full_house(cards, score)
   set = Set.new(score)
   three_of_kind = set.find { |c| score.count(c) == 3 }
   two_of_kind = set.find { |c| score.count(c) == 2 }
-  [7, three_of_kind, two_of_kind]
+  [7, three_of_kind, two_of_kind] if three_of_kind && two_of_kind
+end
+
+def flush_rank(cards, score)
+  is_flush = cards.all? { |c| c[-1] == cards.first[-1] }
+  [6] if is_flush if is_flush
 end
 
 @indexed_cards = 
@@ -156,12 +163,17 @@ def winner_tests
     w = winner(input_to_hands("Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C"))
     w == "White - Four of a Kind"
   end
+  assert do
+    w = winner(input_to_hands("Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH"))
+    w == "Black - Full House"
+  end
 end
 
 def get_play_rank_tests
   assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == [9,6,5,4,3,2] }
   assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == [8,4,4,4,4,4,2] }
   assert { get_play_rank([ '3C','3H','3S','8C','8H' ]) == [7,3,8,8,8,3,3,3] }
+  assert { get_play_rank([ '2H','4H','6H','8H','JH' ]) == [6,11,8,6,4,2] }
 end
 
 class AssertionError < RuntimeError
