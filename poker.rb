@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'set'
+
 def input_to_hands(input)
   split_hands = input.scan(/\w+:(?:\s[0-9AJKQ][HDSC]){5}/)
   split_hands.reduce({ }) do |h, s|
@@ -18,15 +20,17 @@ end
 def get_scores(hands)
   hands.reduce({ }) do |memo, (name, cards)|
     score = get_cards(cards)
-    play_rank = get_play_rank(cards, score)
+    play_rank = get_play_rank(cards)
     memo[name] = [play_rank] + score
     # puts "#{cards} #{memo[name]}"
     memo
   end
 end
 
-def get_play_rank(cards, score)
+def get_play_rank(cards)
+  score = get_cards(cards)
   return 9 if is_straight_flush(cards, score)
+  return 8 if is_four_of_kind(cards, score)
   return 1
 end
 
@@ -42,6 +46,10 @@ end
 def is_straight_flush(cards, score)
   cards.all? { |c| c[-1] == cards.first[-1] } &&
   ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
+end
+
+def is_four_of_kind(cards, score)
+  Set.new(score).count == 2
 end
 
 @indexed_cards = 
@@ -90,6 +98,8 @@ end
 def show_tests
   input_to_hands_tests
   winner_tests
+  get_play_rank_tests
+
   puts 'tests pass'
 end
 
@@ -133,6 +143,11 @@ def winner_tests
     w = winner(input_to_hands("Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH"))
     w == "Black - Straight Flush"
   end
+end
+
+def get_play_rank_tests
+  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == 9 }
+  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == 8 }
 end
 
 class AssertionError < RuntimeError
