@@ -173,10 +173,6 @@ def input_to_hands_tests
 end
 
 def winner_tests
-  assert do 
-    w = winner(input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"))
-    w == "White - High Card"
-  end
   assert do
     w = winner(input_to_hands("Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH"))
     w == "Black - Straight Flush"
@@ -201,6 +197,14 @@ def winner_tests
     w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C"))
     w == "Black - Three of a Kind"
   end
+  assert do
+    w = winner(input_to_hands("Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C"))
+    w == "Green - Two Pairs"
+  end
+  assert do 
+    w = winner(input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"))
+    w == "White - High Card"
+  end
 end
 
 def get_play_rank_tests
@@ -212,6 +216,7 @@ def get_play_rank_tests
   assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,     4,4,4,3,2] }
   assert { get_play_rank([ '8H','8D','4H','4S','5C' ]) == [3,8,4,   8,8,5,4,4] }
   assert { get_play_rank([ '8H','8D','QH','4S','5C' ]) == [2,8,     12,8,8,5,4] }
+  assert { get_play_rank([ '2H','3D','5S','9C','KD' ]) == [1,       13,9,5,3,2] }
 end
 
 class AssertionError < RuntimeError
