@@ -48,9 +48,9 @@ def get_play_label(score)
 end
 
 def straight_flush_rank(cards, score)
-  is_straight_flush = cards.all? { |c| c[-1] == cards.first[-1] } &&
-    ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
-  [9] if is_straight_flush
+  rank1 = straight_rank(cards, score)
+  rank2 = flush_rank(cards, score)
+  [9] + rank1[1..-1] if rank1 && rank2
 end
 
 def four_of_kind_rank(cards, score)
