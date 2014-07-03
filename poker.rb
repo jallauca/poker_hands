@@ -142,17 +142,11 @@ def input_to_hands_tests
       }
   end
   assert do 
-    input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C KH") ==
+    input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C KH Blue: 8C 9H JC QS KC") ==
       {
         'Black' => [ '2H', '3D', '5S', '9C', 'KD' ],
-        'White' => [ '2C', '3H', '4S', '8C', 'KH' ]
-      }
-  end
-  assert do 
-    input_to_hands("Black: 2H 3D 5S 9C KD White: 2D 3H 5C 9S KH") ==
-      {
-        'Black' => [ '2H', '3D', '5S', '9C', 'KD' ],
-        'White' => [ '2D', '3H', '5C', '9S', 'KH' ]
+        'White' => [ '2C', '3H', '4S', '8C', 'KH' ],
+        'Blue'  => [ '8C', '9H', 'JC', 'QS', 'KC' ]
       }
   end
 end
