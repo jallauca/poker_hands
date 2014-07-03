@@ -19,37 +19,37 @@ end
 
 def get_scores(hands)
   hands.reduce({ }) do |memo, (name, cards)|
-    score = get_cards(cards)
-    play_rank = get_play_rank(cards)
-    memo[name] = [play_rank] + score
-    # puts "#{cards} #{memo[name]}"
+    memo[name] = get_play_rank(cards)
     memo
   end
 end
 
 def get_play_rank(cards)
-  score = get_cards(cards)
-  return 9 if is_straight_flush(cards, score)
-  return 8 if is_four_of_kind(cards, score)
-  return 1
+  score = get_ranks(cards)
+
+  play_rank = straight_flush_rank(cards, score) ||
+              four_of_kind_rank(cards, score) ||
+              [1]
+  return play_rank + score
 end
 
 def get_play_label(score)
   case score[0]
-  when 9
-    "Straight Flush"
-  else
-    "High Card"
+    when 9 ; "Straight Flush"
+    when 8 ; "Four of a Kind"
+    else ; "High Card"
   end
 end
 
-def is_straight_flush(cards, score)
-  cards.all? { |c| c[-1] == cards.first[-1] } &&
-  ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
+def straight_flush_rank(cards, score)
+  is_straight_flush = cards.all? { |c| c[-1] == cards.first[-1] } &&
+    ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
+  [9] if is_straight_flush
 end
 
-def is_four_of_kind(cards, score)
-  Set.new(score).count == 2
+def four_of_kind_rank(cards, score)
+  four_of_kind = Set.new(score).find { |c| score.count(c) == 4 }
+  [8, four_of_kind] if four_of_kind
 end
 
 @indexed_cards = 
@@ -58,7 +58,7 @@ end
   .each_with_index
   .reduce({ }) { |h, (n, i)| h[n] = i; h }
 
-def get_cards(cards)
+def get_ranks(cards)
   cards.map { |c| @indexed_cards[ c[0] ] }.sort.reverse
 end
 
@@ -146,8 +146,8 @@ def winner_tests
 end
 
 def get_play_rank_tests
-  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == 9 }
-  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == 8 }
+  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == [9,6,5,4,3,2] }
+  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == [8,4,4,4,4,4,2] }
 end
 
 class AssertionError < RuntimeError
