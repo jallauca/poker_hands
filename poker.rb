@@ -32,6 +32,7 @@ def get_play_rank(cards)
               full_house(cards, score) ||
               flush_rank(cards, score) ||
               straight_rank(cards, score) ||
+              three_of_kind_rank(cards, score) ||
               [1]
   return play_rank + score
 end
@@ -73,6 +74,11 @@ end
 def straight_rank(cards, score)
   is_straight = ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
   [5] if is_straight
+end
+
+def three_of_kind_rank(cards, score)
+  three_of_kind = Set.new(score).find { |c| score.count(c) == 3 }
+  [4, three_of_kind] if three_of_kind
 end
 
 @indexed_cards = 
@@ -173,7 +179,7 @@ def winner_tests
     w == "Black - Flush"
   end
   assert do
-    w = winner(input_to_hands("Black: 3C 3H 2S 2C 8H White: 2H 3D 4H 5S 6C"))
+    w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H White: 2H 3D 4H 5S 6C"))
     w == "White - Straight"
   end
 end
@@ -184,6 +190,7 @@ def get_play_rank_tests
   assert { get_play_rank([ '3C','3H','3S','8C','8H' ]) == [7,3,8,8,8,3,3,3] }
   assert { get_play_rank([ '2H','4H','6H','8H','JH' ]) == [6,11,8,6,4,2] }
   assert { get_play_rank([ '2H','3D','4H','5S','6C' ]) == [5,6,5,4,3,2] }
+  assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,4,4,4,3,2] }
 end
 
 class AssertionError < RuntimeError
