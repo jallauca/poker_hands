@@ -143,6 +143,10 @@ def winner_tests
     w = winner(input_to_hands("Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH"))
     w == "Black - Straight Flush"
   end
+  assert do
+    w = winner(input_to_hands("Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C"))
+    w == "White - Four of a Kind"
+  end
 end
 
 def get_play_rank_tests
