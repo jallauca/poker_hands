@@ -68,5 +68,3 @@ end
 def assert &block
   raise AssertionError unless yield
 end
-
-run_tests
