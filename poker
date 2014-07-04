@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require 'poker.rb'
+
+def script_main
+  tests_flag = false
+  input = ""
+
+  ARGV.each do |value|
+    tests_flag = true if value == '--tests'
+  end
+
+  return require 'tests/poker_test.rb' if tests_flag
+  return show_help unless ARGV.count == 1
+
+  w = winner( input_to_hands(ARGV[0]) )
+  puts "#{w} wins"
+end
+
+def show_help
+  puts "poker \"input\""
+  puts "poker --tests\t\trun tests"
+end
+
+script_main
