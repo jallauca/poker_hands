@@ -27,7 +27,7 @@ def get_play_score(cards)
 
   play_score = straight_flush_score(cards, ranks) ||
                four_of_kind_score(cards, ranks) ||
-               full_house(cards, ranks) ||
+               full_house_score(cards, ranks) ||
                flush_score(cards, ranks) ||
                straight_score(cards, ranks) ||
                three_of_kind_score(cards, ranks) ||
@@ -63,7 +63,7 @@ def four_of_kind_score(cards, score)
   [8, four_of_kind] if four_of_kind
 end
 
-def full_house(cards, score)
+def full_house_score(cards, score)
   set = Set.new(score)
   three_of_kind = set.find { |c| score.count(c) == 3 }
   two_of_kind = set.find { |c| score.count(c) == 2 }
@@ -72,7 +72,7 @@ end
 
 def flush_score(cards, score)
   is_flush = cards.all? { |c| c[-1] == cards.first[-1] }
-  [6] if is_flush if is_flush
+  [6] if is_flush
 end
 
 def straight_score(cards, score)
