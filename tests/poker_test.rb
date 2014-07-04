@@ -1,4 +1,3 @@
-# require '../poker'
 require File.join(File.dirname(__FILE__), '..', 'poker')
 
 def run_tests
@@ -35,37 +34,19 @@ def input_to_hands_tests
 end
 
 def winner_tests
-  assert do
-    w = winner(input_to_hands("Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH"))
-    w == "Black - Straight Flush"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C"))
-    w == "White - Four of a Kind"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH"))
-    w == "Black - Full House"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C"))
-    w == "Black - Flush"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H White: 2H 3D 4H 5S 6C"))
-    w == "White - Straight"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C"))
-    w == "Black - Three of a Kind"
-  end
-  assert do
-    w = winner(input_to_hands("Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C"))
-    w == "Green - Two Pairs"
-  end
-  assert do
-    w = winner(input_to_hands("Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"))
-    w == "White - High Card"
+  hands_winners = [
+    ["Black: 2H 3H 4H 5H 6H White: 2C 3H 4S 8C AH", "Black - Straight Flush"],
+    ["Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C", "White - Four of a Kind"],
+    ["Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH", "Black - Full House"],
+    ["Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C", "Black - Flush"],
+    ["Black: 3C 3H 3S 2C 8H White: 2H 3D 4H 5S 6C", "White - Straight"],
+    ["Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C", "Black - Three of a Kind"],
+    ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C", "Green - Two Pairs"],
+    ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH", "White - High Card"],
+  ]
+
+  hands_winners.each do |(h, w)|
+    assert { winner(input_to_hands(h)) == w }
   end
 end
 
