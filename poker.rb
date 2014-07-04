@@ -52,46 +52,46 @@ def get_play_label(score)
   end
 end
 
-def straight_flush_score(cards, score)
-  rank1 = straight_score(cards, score)
-  rank2 = flush_score(cards, score)
-  [9] + rank1[1..-1] if rank1 && rank2
+def straight_flush_score(cards, ranks)
+  score1 = straight_score(cards, ranks)
+  score2 = flush_score(cards, ranks)
+  [9] + score1[1..-1] if score1 && score2
 end
 
-def four_of_kind_score(cards, score)
-  four_of_kind = Set.new(score).find { |c| score.count(c) == 4 }
+def four_of_kind_score(cards, ranks)
+  four_of_kind = Set.new(ranks).find { |c| ranks.count(c) == 4 }
   [8, four_of_kind] if four_of_kind
 end
 
-def full_house_score(cards, score)
-  set = Set.new(score)
-  three_of_kind = set.find { |c| score.count(c) == 3 }
-  two_of_kind = set.find { |c| score.count(c) == 2 }
+def full_house_score(cards, ranks)
+  set = Set.new(ranks)
+  three_of_kind = set.find { |c| ranks.count(c) == 3 }
+  two_of_kind = set.find { |c| ranks.count(c) == 2 }
   [7, three_of_kind, two_of_kind] if three_of_kind && two_of_kind
 end
 
-def flush_score(cards, score)
+def flush_score(cards, ranks)
   is_flush = cards.all? { |c| c[-1] == cards.first[-1] }
   [6] if is_flush
 end
 
-def straight_score(cards, score)
-  is_straight = ( 0...score.count-1 ).all? { |i| score[i] - score[i+1] == 1 }
+def straight_score(cards, ranks)
+  is_straight = ( 0...ranks.count-1 ).all? { |i| ranks[i] - ranks[i+1] == 1 }
   [5] if is_straight
 end
 
-def three_of_kind_score(cards, score)
-  three_of_kind = Set.new(score).find { |c| score.count(c) == 3 }
+def three_of_kind_score(cards, ranks)
+  three_of_kind = Set.new(ranks).find { |c| ranks.count(c) == 3 }
   [4, three_of_kind] if three_of_kind
 end
 
-def two_pair_score(cards, score)
-  two_pairs = Set.new(score).find_all { |c| score.count(c) == 2 }
+def two_pair_score(cards, ranks)
+  two_pairs = Set.new(ranks).find_all { |c| ranks.count(c) == 2 }
   [3] + two_pairs.sort.reverse if two_pairs.count == 2
 end
 
-def pair_score(cards, score)
-  pair = Set.new(score).find_all { |c| score.count(c) == 2 }
+def pair_score(cards, ranks)
+  pair = Set.new(ranks).find_all { |c| ranks.count(c) == 2 }
   [2] + pair if pair.count == 1
 end
 

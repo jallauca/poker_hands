@@ -39,7 +39,7 @@ def winner_tests
     ["Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C", "White - Four of a Kind"],
     ["Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH", "Black - Full House"],
     ["Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C", "Black - Flush"],
-    ["Black: 3C 3H 3S 2C 8H White: 2H 3D 4H 5S 6C", "White - Straight"],
+    ["Black: 3C 3H 3S 2C 8H White: 6H 5D 4H 3S 2C", "White - Straight"],
     ["Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C", "Black - Three of a Kind"],
     ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C", "Green - Two Pairs"],
     ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH", "White - High Card"],
