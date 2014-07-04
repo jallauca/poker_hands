@@ -2,10 +2,10 @@ require 'set'
 
 def input_to_hands(input)
   split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC]){5}/)
-  split_hands.reduce({ }) do |h, s|
-    name, cards = s.split(":")
-    h[ name ] = cards.strip.split(" ")
-    h
+  split_hands.reduce({ }) do |hash, hand|
+    name, cards = hand.split(":")
+    hash[name] = cards.strip.split(" ")
+    hash
   end
 end
 
@@ -99,7 +99,7 @@ end
   "0 1 2 3 4 5 6 7 8 9 10 J Q K A"
   .split(" ")
   .each_with_index
-  .reduce({ }) { |h, (n, i)| h[n] = i; h }
+  .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
 
 def get_ranks(cards)
   cards.map { |c| @indexed_cards[ c[0..-2] ] }.sort.reverse
@@ -109,11 +109,9 @@ def hand_comparison(hand1, hand2)
   _, score1 = hand1
   _, score2 = hand2
 
-  cmp = 0
-  score1.each_with_index do |c, i|
+  score1.each_with_index do |_, i|
     cmp = score1[i] <=> score2[i]
-    break unless cmp == 0
+    return cmp unless cmp == 0
   end
-
-  cmp
+  return 0
 end
