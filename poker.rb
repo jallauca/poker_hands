@@ -1,7 +1,7 @@
 require 'set'
 
 def input_to_hands(input)
-  split_hands = input.scan(/\w+:(?:\s[0-9AJKQ][HDSC]){5}/)
+  split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC]){5}/)
   split_hands.reduce({ }) do |h, s|
     name, cards = s.split(":")
     h[ name ] = cards.strip.split(" ")
