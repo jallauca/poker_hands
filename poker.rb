@@ -76,9 +76,7 @@ def flush_score(cards, ranks)
 end
 
 def straight_score(cards, ranks)
-  is_straight = ranks.each_cons(2).all? do |rank1, rank2|
-    (rank1 - rank2).abs == 1
-  end
+  is_straight = ranks.each_cons(2).all? { |r1, r2| (r1 - r2).abs == 1 }
   [5] if is_straight
 end
 
