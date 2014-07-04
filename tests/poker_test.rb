@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '..', 'poker')
 def run_tests
   input_to_hands_tests
   winner_tests
-  get_play_rank_tests
+  get_play_score_tests
 
   puts 'tests pass'
 end
@@ -50,16 +50,16 @@ def winner_tests
   end
 end
 
-def get_play_rank_tests
-  assert { get_play_rank([ '2H','3H','4H','5H','6H' ]) == [9,6,     5,4,3,2] }
-  assert { get_play_rank([ '2H','4H','4D','4S','4C' ]) == [8,4,     4,4,4,4,2] }
-  assert { get_play_rank([ '3C','3H','3S','8C','8H' ]) == [7,3,8,   8,8,3,3,3] }
-  assert { get_play_rank([ '2H','4H','6H','8H','JH' ]) == [6,       11,8,6,4,2] }
-  assert { get_play_rank([ '2H','3D','4H','5S','6C' ]) == [5,       6,5,4,3,2] }
-  assert { get_play_rank([ '3H','2D','4H','4S','4C' ]) == [4,4,     4,4,4,3,2] }
-  assert { get_play_rank([ '8H','8D','4H','4S','5C' ]) == [3,8,4,   8,8,5,4,4] }
-  assert { get_play_rank([ '8H','8D','QH','4S','5C' ]) == [2,8,     12,8,8,5,4] }
-  assert { get_play_rank([ '2H','3D','5S','9C','KD' ]) == [1,       13,9,5,3,2] }
+def get_play_score_tests
+  assert { get_play_score([ '2H','3H','4H','5H','6H' ]) == [9,6,     5,4,3,2] }
+  assert { get_play_score([ '2H','4H','4D','4S','4C' ]) == [8,4,     4,4,4,4,2] }
+  assert { get_play_score([ '3C','3H','3S','8C','8H' ]) == [7,3,8,   8,8,3,3,3] }
+  assert { get_play_score([ '2H','4H','6H','8H','JH' ]) == [6,       11,8,6,4,2] }
+  assert { get_play_score([ '2H','3D','4H','5S','6C' ]) == [5,       6,5,4,3,2] }
+  assert { get_play_score([ '3H','2D','4H','4S','4C' ]) == [4,4,     4,4,4,3,2] }
+  assert { get_play_score([ '8H','8D','4H','4S','5C' ]) == [3,8,4,   8,8,5,4,4] }
+  assert { get_play_score([ '8H','8D','QH','4S','5C' ]) == [2,8,     12,8,8,5,4] }
+  assert { get_play_score([ '2H','3D','5S','9C','KD' ]) == [1,       13,9,5,3,2] }
 end
 
 class AssertionError < RuntimeError
