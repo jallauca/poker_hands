@@ -11,7 +11,8 @@ end
 
 def winner(hands)
   hand_scores = get_scores(hands)
-  hands_by_score_desc = hand_scores.sort { |hand1, hand2| -hand_comparison(hand1, hand2) }
+  desc_hand_comparison = ->(h1, h2) { -hand_comparison(h1, h2) }
+  hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
   first_hand, first_score = hands_by_score_desc.first
 
   winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
@@ -118,7 +119,6 @@ end
 def hand_comparison(hand1, hand2)
   _, score1 = hand1
   _, score2 = hand2
-
   score1.each_with_index do |_, i|
     cmp = score1[i] <=> score2[i]
     return cmp unless cmp == 0
