@@ -11,8 +11,18 @@ end
 
 def winner(hands)
   hand_scores = get_scores(hands)
-  winner, score = hand_scores.max { |hand1, hand2| hand_comparison(hand1, hand2) }
-  "#{winner} - #{get_play_label(score)}"
+  hands_by_score_desc = hand_scores.sort { |hand1, hand2| -hand_comparison(hand1, hand2) }
+  first_hand, first_score = hands_by_score_desc.first
+
+  winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
+
+  return display_multiple(winners) if winners.count > 1
+  "#{first_hand} - #{get_play_label(first_score)}"
+end
+
+def display_multiple(winners)
+  winners_string =  winners.map { |w| w[0] }.join(', ')
+  return "#{winners_string} - Tie"
 end
 
 def get_scores(hands)
