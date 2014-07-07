@@ -44,7 +44,10 @@ def winner_tests
     ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C", "Green - Two Pairs"],
     ["Black: JC 3H 3S 2C 8H Green: 2H 3D 5S 9C KD", "Black - Pair"],
     ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH", "White - High Card"],
-    ["Black: 2H 3D 5S 9C KD White: 2C 3H 5C 9H KC", "Black, White - Tie"]
+    ["Black: 2H 3D 5S 9C KD White: 2C 3H 5C 9H KC", "Black, White - Tie"],
+
+    ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10S JH QD KS AC", "Black - Full House"],
+    ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10D JD QD KD AD", "White - Straight Flush"],
   ]
 
   hands_winners.each do |(h, w)|

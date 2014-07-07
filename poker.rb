@@ -1,7 +1,7 @@
 require 'set'
 
 def input_to_hands(input)
-  split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC]){5}/)
+  split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC])*/)
   split_hands.reduce({ }) do |hash, hand|
     name, cards = hand.split(":")
     hash[name] = cards.strip.split(" ")
@@ -10,6 +10,7 @@ def input_to_hands(input)
 end
 
 def winner(hands)
+  hands = best_hand_combination(hands)
   hand_scores = get_scores(hands)
   desc_hand_comparison = ->(h1, h2) { -hand_comparison(h1, h2) }
   hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
@@ -19,6 +20,17 @@ def winner(hands)
 
   return display_multiple(winners) if winners.count > 1
   "#{first_hand} - #{get_play_label(first_score)}"
+end
+
+def best_hand_combination(hands)
+  hands.reduce({ }) do |hash, (hand, cards)|
+    _, _, best_cards = cards
+                      .combination(5)
+                      .map { |c| [hand, get_play_score(c), c] }
+                      .max { |h1, h2| hand_comparison(h1, h2) }
+    hash[hand] = best_cards
+    hash
+  end
 end
 
 def display_multiple(winners)
@@ -49,6 +61,10 @@ def get_play_score(cards)
   return play_score + ranks
 end
 
+def get_ranks(cards)
+  cards.map { |c| @indexed_cards[ c[0..-2] ] }.sort.reverse
+end
+
 def get_play_label(score)
   case score[0]
     when 9 ; "Straight Flush"
@@ -59,14 +75,14 @@ def get_play_label(score)
     when 4 ; "Three of a Kind"
     when 3 ; "Two Pairs"
     when 2 ; "Pair"
-    else ; "High Card"
+    else   ; "High Card"
   end
 end
 
 def straight_flush_score(cards, ranks)
   score1 = straight_score(cards, ranks)
   score2 = flush_score(cards, ranks)
-  [9] + score1[1..-1] if score1 && score2
+  [9] if score1 && score2
 end
 
 def four_of_kind_score(cards, ranks)
@@ -111,10 +127,6 @@ end
   .split(" ")
   .each_with_index
   .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
-
-def get_ranks(cards)
-  cards.map { |c| @indexed_cards[ c[0..-2] ] }.sort.reverse
-end
 
 def hand_comparison(hand1, hand2)
   _, score1 = hand1
