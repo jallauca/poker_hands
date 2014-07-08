@@ -6,7 +6,7 @@ class Poker
       winner( input_to_hands(input) )
     end
 
-    private
+    # private
 
     def input_to_hands(input)
       split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC])*/)
