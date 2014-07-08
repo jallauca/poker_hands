@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'poker.rb'
-require 'tests/poker_test.rb'
+require 'lib/poker.rb'
 
 def script_main
   tests_flag = false
@@ -12,9 +11,9 @@ def script_main
   end
 
   return show_help unless ARGV.count == 1
-  return run_tests if tests_flag
+  return puts(%x( be rspec )) if tests_flag
 
-  w = winner( input_to_hands(ARGV[0]) )
+  w = Poker.find_winner( ARGV[0] )
   puts "#{w} wins"
 end
 
