@@ -3,8 +3,10 @@ require File.join(File.dirname(__FILE__), '../lib', 'poker')
 describe Poker do
 
   it "input_to_hands should identify hands and respective list of cards" do
+    # poker = class PokerTest ; include Poker ; end
     expect(
-      Poker.input_to_hands("Black: 2H 3D 5S 10C KD White: 2C 3H 4S 8C AH")).to eq(
+      Poker.send(:input_to_hands,
+                 "Black: 2H 3D 5S 10C KD White: 2C 3H 4S 8C AH")).to eq(
         {
           'Black' => [ '2H', '3D', '5S', '10C', 'KD' ],
           'White' => [ '2C', '3H', '4S', '8C', 'AH' ]
@@ -12,7 +14,8 @@ describe Poker do
       )
 
     expect(
-      Poker.input_to_hands("Black: 2H 4S 4C 2D 4H White: 2S 8S AS QS 3S")).to eq(
+      Poker.send(:input_to_hands,
+                 "Black: 2H 4S 4C 2D 4H White: 2S 8S AS QS 3S")).to eq(
         {
           'Black' => [ '2H', '4S', '4C', '2D', '4H' ],
           'White' => [ '2S', '8S', 'AS', 'QS', '3S' ]
@@ -20,8 +23,8 @@ describe Poker do
       )
 
     expect(
-      Poker.input_to_hands(
-        "Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C KH Blue: 8C 9H JC QS KC")).to eq(
+      Poker.send(:input_to_hands,
+                 "Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C KH Blue: 8C 9H JC QS KC")).to eq(
         {
           'Black' => [ '2H', '3D', '5S', '9C', 'KD' ],
           'White' => [ '2C', '3H', '4S', '8C', 'KH' ],
@@ -61,15 +64,15 @@ describe Poker do
   end
 
   it "get_play_score_tests" do
-    expect( Poker.get_play_score([ '2H','3H','4H','5H','6H' ]) ).to eq( [9,6,     5,4,3,2] )
-    expect( Poker.get_play_score([ '2H','4H','4D','4S','4C' ]) ).to eq( [8,4,     4,4,4,4,2] )
-    expect( Poker.get_play_score([ '3C','3H','3S','8C','8H' ]) ).to eq( [7,3,8,   8,8,3,3,3] )
-    expect( Poker.get_play_score([ '2H','4H','6H','8H','JH' ]) ).to eq( [6,       11,8,6,4,2] )
-    expect( Poker.get_play_score([ '2H','3D','4H','5S','6C' ]) ).to eq( [5,       6,5,4,3,2] )
-    expect( Poker.get_play_score([ '3H','2D','4H','4S','4C' ]) ).to eq( [4,4,     4,4,4,3,2] )
-    expect( Poker.get_play_score([ '8H','8D','4H','4S','5C' ]) ).to eq( [3,8,4,   8,8,5,4,4] )
-    expect( Poker.get_play_score([ '8H','8D','QH','4S','5C' ]) ).to eq( [2,8,     12,8,8,5,4] )
-    expect( Poker.get_play_score([ '2H','3D','5S','9C','KD' ]) ).to eq( [1,       13,9,5,3,2] )
+    expect( Poker.send(:get_play_score, [ '2H','3H','4H','5H','6H' ]) ).to eq( [9,6,     5,4,3,2] )
+    expect( Poker.send(:get_play_score, [ '2H','4H','4D','4S','4C' ]) ).to eq( [8,4,     4,4,4,4,2] )
+    expect( Poker.send(:get_play_score, [ '3C','3H','3S','8C','8H' ]) ).to eq( [7,3,8,   8,8,3,3,3] )
+    expect( Poker.send(:get_play_score, [ '2H','4H','6H','8H','JH' ]) ).to eq( [6,       11,8,6,4,2] )
+    expect( Poker.send(:get_play_score, [ '2H','3D','4H','5S','6C' ]) ).to eq( [5,       6,5,4,3,2] )
+    expect( Poker.send(:get_play_score, [ '3H','2D','4H','4S','4C' ]) ).to eq( [4,4,     4,4,4,3,2] )
+    expect( Poker.send(:get_play_score, [ '8H','8D','4H','4S','5C' ]) ).to eq( [3,8,4,   8,8,5,4,4] )
+    expect( Poker.send(:get_play_score, [ '8H','8D','QH','4S','5C' ]) ).to eq( [2,8,     12,8,8,5,4] )
+    expect( Poker.send(:get_play_score, [ '2H','3D','5S','9C','KD' ]) ).to eq( [1,       13,9,5,3,2] )
   end
 
 end
