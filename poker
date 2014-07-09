@@ -11,7 +11,7 @@ def script_main
   end
 
   return show_help unless ARGV.count == 1
-  return puts(%x( be rspec )) if tests_flag
+  return puts(%x( bundle exec rspec )) if tests_flag
 
   w = Poker.find_winner( ARGV[0] )
   puts "#{w} wins"
