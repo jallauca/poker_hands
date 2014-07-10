@@ -105,7 +105,9 @@ module Poker
   end
 
   def get_ranks(cards)
-    cards.map { |c| indexed_cards[ c[0..-2] ] }.sort.reverse
+    cards = cards.map { |c| indexed_cards[ c[0..-2] ] }.sort.reverse
+    return [5,4,3,2,1] if cards == [14,5,4,3,2]
+    cards
   end
 
   def get_play_label(score)
