@@ -56,15 +56,16 @@ module Poker
 
   def get_play_score(cards)
     ranks = get_ranks(cards)
+    set = Set.new(ranks)
 
-    play_score = straight_flush_score(cards, ranks) ||
-                 four_of_kind_score(cards, ranks) ||
-                 full_house_score(cards, ranks) ||
-                 flush_score(cards, ranks) ||
-                 straight_score(cards, ranks) ||
-                 three_of_kind_score(cards, ranks) ||
-                 two_pair_score(cards, ranks) ||
-                 pair_score(cards, ranks) ||
+    play_score = straight_flush_score(cards, ranks, set) ||
+                 four_of_kind_score(cards, ranks, set) ||
+                 full_house_score(cards, ranks, set) ||
+                 flush_score(cards, ranks, set) ||
+                 straight_score(cards, ranks, set) ||
+                 three_of_kind_score(cards, ranks, set) ||
+                 two_pair_score(cards, ranks, set) ||
+                 pair_score(cards, ranks, set) ||
                  [1]
 
     return play_score + ranks
@@ -96,46 +97,45 @@ module Poker
     end
   end
 
-  def straight_flush_score(cards, ranks)
-    score1 = straight_score(cards, ranks)
-    score2 = flush_score(cards, ranks)
+  def straight_flush_score(cards, ranks, set)
+    score1 = straight_score(cards, ranks, set)
+    score2 = flush_score(cards, ranks, set)
     [9] if score1 && score2
   end
 
-  def four_of_kind_score(cards, ranks)
-    four_of_kind = Set.new(ranks).find { |c| ranks.count(c) == 4 }
+  def four_of_kind_score(cards, ranks, set)
+    four_of_kind = set.find { |c| ranks.count(c) == 4 }
     [8, four_of_kind] if four_of_kind
   end
 
-  def full_house_score(cards, ranks)
-    set = Set.new(ranks)
+  def full_house_score(cards, ranks, set)
     three_of_kind = set.find { |c| ranks.count(c) == 3 }
     two_of_kind = set.find { |c| ranks.count(c) == 2 }
     [7, three_of_kind, two_of_kind] if three_of_kind && two_of_kind
   end
 
-  def flush_score(cards, ranks)
+  def flush_score(cards, ranks, set)
     is_flush = cards.all? { |c| c[-1] == cards.first[-1] }
     [6] if is_flush
   end
 
-  def straight_score(cards, ranks)
-    is_straight = ranks.each_cons(2).all? { |r1, r2| (r1 - r2).abs == 1 }
+  def straight_score(cards, ranks, set)
+    is_straight = set.count == 5 && (ranks[0] - ranks[-1]) == 4
     [5] if is_straight
   end
 
-  def three_of_kind_score(cards, ranks)
-    three_of_kind = Set.new(ranks).find { |c| ranks.count(c) == 3 }
+  def three_of_kind_score(cards, ranks, set)
+    three_of_kind = set.find { |c| ranks.count(c) == 3 }
     [4, three_of_kind] if three_of_kind
   end
 
-  def two_pair_score(cards, ranks)
-    two_pairs = Set.new(ranks).find_all { |c| ranks.count(c) == 2 }
+  def two_pair_score(cards, ranks, set)
+    two_pairs = set.find_all { |c| ranks.count(c) == 2 }
     [3] + two_pairs.sort.reverse if two_pairs.count == 2
   end
 
-  def pair_score(cards, ranks)
-    pair = Set.new(ranks).find_all { |c| ranks.count(c) == 2 }
+  def pair_score(cards, ranks, set)
+    pair = set.find_all { |c| ranks.count(c) == 2 }
     [2] + pair if pair.count == 1
   end
 
