@@ -32,7 +32,7 @@ module Poker
     second_score = hands_by_score_desc[1][1]
     high_card = find_high_card(first_score, second_score)
     solution = "#{first_hand} - #{get_play_label(first_score)}"
-    solution += " High Card: #{high_card}" if high_card
+    solution += " High Card: #{indexed_cards_inverse[high_card]}" if high_card
     solution
   end
 
@@ -90,6 +90,10 @@ module Poker
       .split(" ")
       .each_with_index
       .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
+  end
+
+  def indexed_cards_inverse
+    indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   end
 
   def get_ranks(cards)
