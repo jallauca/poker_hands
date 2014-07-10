@@ -31,7 +31,10 @@ module Poker
 
     second_score = hands_by_score_desc[1][1]
     high_card = find_high_card(first_score, second_score)
-    solution = "#{first_hand} - #{get_play_label(first_score)}"
+    play_label = get_play_label(first_score)
+
+    solution = "#{first_hand} wins -"
+    solution += " #{play_label}" if play_label.length > 0
     solution += " High Card: #{indexed_cards_inverse[high_card]}" if high_card
     solution
   end
@@ -110,7 +113,7 @@ module Poker
       when 4 ; "Three of a Kind"
       when 3 ; "Two Pairs"
       when 2 ; "Pair"
-      else   ; "High Card"
+      else   ; ""
     end
   end
 

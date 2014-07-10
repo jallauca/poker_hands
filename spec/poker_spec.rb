@@ -3,7 +3,6 @@ require File.join(File.dirname(__FILE__), '../lib', 'poker')
 describe Poker do
 
   it "input_to_hands should identify hands and respective list of cards" do
-    # poker = class PokerTest ; include Poker ; end
     expect(
       Poker.send(:input_to_hands,
                  "Black: 2H 3D 5S 10C KD White: 2C 3H 4S 8C AH")).to eq(
@@ -36,22 +35,23 @@ describe Poker do
   it "determines winner between two players" do
     hands_winners = [
       ["Black: 2H 3H 4H 5H 6H White: 3C 3H 4S 8C AH",
-       "Black - Straight Flush"],
+       "Black wins - Straight Flush"],
       ["Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C",
-       "White - Four of a Kind"],
+       "White wins - Four of a Kind"],
       ["Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH",
-       "Black - Full House"],
+       "Black wins - Full House"],
       ["Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C",
-       "Black - Flush"],
-      ["Black: 3C 3H 3S 2C 8H White: 6H 5D 4H 3S 2C", "White - Straight"],
+       "Black wins - Flush"],
+      ["Black: 3C 3H 3S 2C 8H White: 6H 5D 4H 3S 2C",
+       "White wins - Straight"],
       ["Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C",
-       "Black - Three of a Kind"],
+       "Black wins - Three of a Kind"],
       ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C",
-       "Green - Two Pairs"],
+       "Green wins - Two Pairs"],
       ["Black: JC 3H 3S 2C 8H Green: 2H 3D 5S 9C KD",
-       "Black - Pair"],
+       "Black wins - Pair"],
       ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH",
-       "White - High Card High Card: A"],
+       "White wins - High Card: A"],
     ]
 
     hands_winners.each do |(h, w)|
@@ -67,23 +67,23 @@ describe Poker do
   it "determines high card  between two players when they have the same rank" do
     hands_winners = [
       ["Black: 2H 3H 4H 5H 6H White: 3C 4C 5C 6C 7C",
-       "White - Straight Flush High Card: 7"],
+       "White wins - Straight Flush High Card: 7"],
       ["Black: 4H 4D 4S 4C 8H White: 2H 4H 4D 4S 4C",
-       "Black - Four of a Kind High Card: 8"],
+       "Black wins - Four of a Kind High Card: 8"],
       ["Black: 3C 3H 3S 8C 8H White: 3C 3H 3S JH JH",
-       "White - Full House High Card: J"],
+       "White wins - Full House High Card: J"],
       ["Black: 2H 4H 6H 8H JH White: 2C 4C 7C 8C JC",
-       "White - Flush High Card: 7"],
+       "White wins - Flush High Card: 7"],
       ["Black: 4C 5H 6S 7C 8H White: 6H 5D 4H 3S 2C",
-       "Black - Straight High Card: 8"],
+       "Black wins - Straight High Card: 8"],
       ["Black: 3C 3H 3S 2C 8H Green: 3H 3D 3C 4S QC",
-       "Green - Three of a Kind High Card: Q"],
+       "Green wins - Three of a Kind High Card: Q"],
       ["Black: 2C 2H 4S 4C 8H Green: 2H 2D 4H 4S 6C",
-       "Black - Two Pairs High Card: 8"],
+       "Black wins - Two Pairs High Card: 8"],
       ["Black: JC 3H 3S 2C 8H Green: 2H 3D 3S 9C KD",
-       "Green - Pair High Card: K"],
+       "Green wins - Pair High Card: K"],
       ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH",
-       "White - High Card High Card: A"],
+       "White wins - High Card: A"],
     ]
 
     hands_winners.each do |(h, w)|
@@ -93,8 +93,8 @@ describe Poker do
 
   it "determines winner between two players and seven cards" do
     hands_winners = [
-      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10S JH QD KS AC", "Black - Full House"],
-      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10D JD QD KD AD", "White - Straight Flush"],
+      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10S JH QD KS AC", "Black wins - Full House"],
+      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10D JD QD KD AD", "White wins - Straight Flush"],
     ]
 
     hands_winners.each do |(h, w)|
