@@ -70,13 +70,16 @@ module Poker
     return play_score + ranks
   end
 
-  def get_ranks(cards)
+  def indexed_cards
     @indexed_cards =
       "0 1 2 3 4 5 6 7 8 9 10 J Q K A"
       .split(" ")
       .each_with_index
       .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
-    cards.map { |c| @indexed_cards[ c[0..-2] ] }.sort.reverse
+  end
+
+  def get_ranks(cards)
+    cards.map { |c| indexed_cards[ c[0..-2] ] }.sort.reverse
   end
 
   def get_play_label(score)
