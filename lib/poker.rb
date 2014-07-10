@@ -28,7 +28,12 @@ module Poker
     winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
 
     return display_multiple(winners) if winners.count > 1
-    "#{first_hand} - #{get_play_label(first_score)}"
+
+    second_score = hands_by_score_desc[1][1]
+    high_card = find_high_card(first_score, second_score)
+    solution = "#{first_hand} - #{get_play_label(first_score)}"
+    solution += " High Card: #{high_card}" if high_card
+    solution
   end
 
   def best_hand_combination(hands)
@@ -40,6 +45,14 @@ module Poker
       hash[hand] = best_cards
       hash
     end
+  end
+
+  def find_high_card(first_score, second_score)
+    return nil if first_score[0] > second_score[0]
+    high_card, _ = first_score.each_with_index.find do |c, i|
+      c > second_score[i] && i > 0
+    end
+    high_card
   end
 
   def display_multiple(winners)

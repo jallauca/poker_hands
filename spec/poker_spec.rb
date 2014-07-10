@@ -35,16 +35,55 @@ describe Poker do
 
   it "determines winner between two players" do
     hands_winners = [
-      ["Black: 2H 3H 4H 5H 6H White: 3C 3H 4S 8C AH", "Black - Straight Flush"],
-      ["Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C", "White - Four of a Kind"],
-      ["Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH", "Black - Full House"],
-      ["Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C", "Black - Flush"],
+      ["Black: 2H 3H 4H 5H 6H White: 3C 3H 4S 8C AH",
+       "Black - Straight Flush"],
+      ["Black: 3C 3H 3S 8C 8H White: 2H 4H 4D 4S 4C",
+       "White - Four of a Kind"],
+      ["Black: 3C 3H 3S 8C 8H White: 2H 4H 6H 8H JH",
+       "Black - Full House"],
+      ["Black: 2H 4H 6H 8H JH White: 2H 3D 4H 5S 6C",
+       "Black - Flush"],
       ["Black: 3C 3H 3S 2C 8H White: 6H 5D 4H 3S 2C", "White - Straight"],
-      ["Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C", "Black - Three of a Kind"],
-      ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C", "Green - Two Pairs"],
-      ["Black: JC 3H 3S 2C 8H Green: 2H 3D 5S 9C KD", "Black - Pair"],
-      ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH", "White - High Card"],
-      ["Black: 2H 3D 5S 9C KD White: 2C 3H 5C 9H KC", "Black, White - Tie"],
+      ["Black: 3C 3H 3S 2C 8H Green: 2H 2D 4H 4S 6C",
+       "Black - Three of a Kind"],
+      ["Black: JC 3H QS 2C 8H Green: 2H 2D 4H 4S 6C",
+       "Green - Two Pairs"],
+      ["Black: JC 3H 3S 2C 8H Green: 2H 3D 5S 9C KD",
+       "Black - Pair"],
+      ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH",
+       "White - High Card High Card: 14"],
+    ]
+
+    hands_winners.each do |(h, w)|
+      expect( Poker.find_winner(h) ).to eq( w )
+    end
+  end
+
+  it "determines a tie" do
+    expect( Poker.find_winner("Black: 2H 3D 5S 9C KD White: 2C 3H 5C 9H KC") )
+       .to eq( "Black, White - Tie" )
+  end
+
+  it "determines high card  between two players when they have the same rank" do
+    hands_winners = [
+      ["Black: 2H 3H 4H 5H 6H White: 3C 4C 5C 6C 7C",
+       "White - Straight Flush High Card: 7"],
+      ["Black: 4H 4D 4S 4C 8H White: 2H 4H 4D 4S 4C",
+       "Black - Four of a Kind High Card: 8"],
+      ["Black: 3C 3H 3S 8C 8H White: 3C 3H 3S JH JH",
+       "White - Full House High Card: 11"],
+      ["Black: 2H 4H 6H 8H JH White: 2C 4C 7C 8C JC",
+       "White - Flush High Card: 7"],
+      ["Black: 4C 5H 6S 7C 8H White: 6H 5D 4H 3S 2C",
+       "Black - Straight High Card: 8"],
+      ["Black: 3C 3H 3S 2C 8H Green: 3H 3D 3C 4S QC",
+       "Green - Three of a Kind High Card: 12"],
+      ["Black: 2C 2H 4S 4C 8H Green: 2H 2D 4H 4S 6C",
+       "Black - Two Pairs High Card: 8"],
+      ["Black: JC 3H 3S 2C 8H Green: 2H 3D 3S 9C KD",
+       "Green - Pair High Card: 13"],
+      ["Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH",
+       "White - High Card High Card: 14"],
     ]
 
     hands_winners.each do |(h, w)|
