@@ -29,14 +29,7 @@ module Poker
 
     return display_multiple(winners) if winners.count > 1
 
-    second_score = hands_by_score_desc[1][1]
-    high_card = find_high_card(first_score, second_score)
-    play_label = get_play_label(first_score)
-
-    solution = "#{first_hand} wins -"
-    solution += " #{play_label}" if play_label.length > 0
-    solution += " High Card: #{indexed_cards_inverse[high_card]}" if high_card
-    solution
+    display_winner(hands_by_score_desc)
   end
 
   def best_hand_combination(hands)
@@ -61,6 +54,18 @@ module Poker
   def display_multiple(winners)
     winners_string =  winners.map { |w| w[0] }.join(', ')
     return "#{winners_string} - Tie"
+  end
+
+  def display_winner(hands_by_score_desc)
+    first_hand, first_score = hands_by_score_desc.first
+    second_score = hands_by_score_desc[1][1]
+    high_card = find_high_card(first_score, second_score)
+    play_label = get_play_label(first_score)
+
+    solution = "#{first_hand} wins -"
+    solution += " #{play_label}" if play_label.length > 0
+    solution += " High Card: #{indexed_cards_inverse[high_card]}" if high_card
+    solution
   end
 
   def get_scores(hands)
