@@ -93,11 +93,8 @@ module Poker
   end
 
   def indexed_cards
-    @indexed_cards =
-      "0 1 2 3 4 5 6 7 8 9 T J Q K A"
-      .split(" ")
-      .each_with_index
-      .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
+    @indexed_cards ||=
+      Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   end
 
   def indexed_cards_inverse
@@ -142,7 +139,8 @@ module Poker
   end
 
   def flush_score(cards, ranks, set)
-    is_flush = cards.all? { |c| c[-1] == cards.first[-1] }
+    suits = Set.new( cards.map { |c| c[-1] } )
+    is_flush = suits.count == 1
     [6] if is_flush
   end
 
