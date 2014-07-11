@@ -5,9 +5,9 @@ describe Poker do
   it "input_to_hands should identify hands and respective list of cards" do
     expect(
       Poker.send(:input_to_hands,
-                 "Black: 2H 3D 5S 10C KD White: 2C 3H 4S 8C AH")).to eq(
+                 "Black: 2H 3D 5S TC KD White: 2C 3H 4S 8C AH")).to eq(
         {
-          'Black' => [ '2H', '3D', '5S', '10C', 'KD' ],
+          'Black' => [ '2H', '3D', '5S', 'TC', 'KD' ],
           'White' => [ '2C', '3H', '4S', '8C', 'AH' ]
         }
       )
@@ -101,8 +101,8 @@ describe Poker do
 
   it "determines winner between two players and seven cards" do
     hands_winners = [
-      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10S JH QD KS AC", "Black wins - Full House"],
-      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD 10D JD QD KD AD", "White wins - Straight Flush"],
+      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD TS JH QD KS AC", "Black wins - Full House"],
+      ["Black: 2C JC 3H JD 3S JS 2D White: QH QD TD JD QD KD AD", "White wins - Straight Flush"],
     ]
 
     hands_winners.each do |(h, w)|

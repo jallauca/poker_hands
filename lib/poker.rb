@@ -10,7 +10,7 @@ module Poker
   private
 
   def input_to_hands(input)
-    split_hands = input.scan(/\w+:(?:\s(?:[0-9AJKQ]|10)[HDSC])*/)
+    split_hands = input.scan(/\w+:(?:\s[0-9TAJKQ][HDSC])*/)
     split_hands.reduce({ }) do |hash, hand|
       name, cards = hand.split(":")
       hash[name] = cards.strip.split(" ")
@@ -94,7 +94,7 @@ module Poker
 
   def indexed_cards
     @indexed_cards =
-      "0 1 2 3 4 5 6 7 8 9 10 J Q K A"
+      "0 1 2 3 4 5 6 7 8 9 T J Q K A"
       .split(" ")
       .each_with_index
       .reduce({ }) { |hash, (number, i)| hash[number] = i; hash }
