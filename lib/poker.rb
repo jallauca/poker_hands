@@ -21,7 +21,7 @@ module Poker
   def winner(hands)
     hands = best_hand_combination(hands)
     hand_scores = get_scores(hands)
-    desc_hand_comparison = ->(h1, h2) { -hand_comparison(h1, h2) }
+    desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
     hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
     first_hand, first_score = hands_by_score_desc.first
 
@@ -37,7 +37,7 @@ module Poker
       _, _, best_cards = cards
                         .combination(5)
                         .map { |c| [hand, get_play_score(c), c] }
-                        .max #{ |h1, h2| hand_comparison(h1, h2) }
+                        .max
       hash[hand] = best_cards
       hash
     end
@@ -156,16 +156,6 @@ module Poker
   def pair_score(cards, ranks, set)
     pair = set.find_all { |c| ranks.count(c) == 2 }
     [2] + pair if pair.count == 1
-  end
-
-  def hand_comparison(hand1, hand2)
-    _, score1 = hand1
-    _, score2 = hand2
-    score1.each_with_index do |_, i|
-      cmp = score1[i] <=> score2[i]
-      return cmp unless cmp == 0
-    end
-    return 0
   end
 
   end
