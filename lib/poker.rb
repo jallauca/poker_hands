@@ -97,6 +97,12 @@ module Poker
       Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   end
 
+  def ranked_plays
+    @ranked_plays ||=
+      ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
+       "Full House","Four of a Kind","Straight Flush"]
+  end
+
   def indexed_cards_inverse
     indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   end
@@ -108,17 +114,7 @@ module Poker
   end
 
   def get_play_label(score)
-    case score[0]
-      when 9 ; "Straight Flush"
-      when 8 ; "Four of a Kind"
-      when 7 ; "Full House"
-      when 6 ; "Flush"
-      when 5 ; "Straight"
-      when 4 ; "Three of a Kind"
-      when 3 ; "Two Pairs"
-      when 2 ; "Pair"
-      else   ; ""
-    end
+     ranked_plays[score[0]]
   end
 
   def straight_flush_score(cards, ranks, set)
