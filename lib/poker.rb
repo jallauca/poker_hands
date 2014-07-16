@@ -37,7 +37,7 @@ module Poker
       _, _, best_cards = cards
                         .combination(5)
                         .map { |c| [hand, get_play_score(c), c] }
-                        .max { |h1, h2| hand_comparison(h1, h2) }
+                        .max #{ |h1, h2| hand_comparison(h1, h2) }
       hash[hand] = best_cards
       hash
     end
