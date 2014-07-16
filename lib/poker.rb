@@ -97,14 +97,14 @@ module Poker
       Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   end
 
+  def indexed_cards_inverse
+    indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
+  end
+
   def ranked_plays
     @ranked_plays ||=
       ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
        "Full House","Four of a Kind","Straight Flush"]
-  end
-
-  def indexed_cards_inverse
-    indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   end
 
   def get_ranks(cards)
