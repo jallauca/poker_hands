@@ -110,10 +110,11 @@ describe Poker do
     end
   end
 
-  it "determines winner between two players in Texas Hold'em" do
+  it "determines winner between players in Texas Hold'em" do
     hands_winners = [
       ["House: QH QD JC 3H JD Black: JH QS White: 2S TS", "Black wins - Full House"],
       ["House: QH QD JC 3H JD Black: 3S TS White: KD AD", "White wins - Two Pairs High Card: A"],
+      ["House: QH QD JC 3H JD Black: 3S TS White: KD AD Green: QS QD", "Green wins - Four of a Kind"],
     ]
 
     hands_winners.each do |(h, w)|
