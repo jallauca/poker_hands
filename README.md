@@ -13,7 +13,7 @@ This is a solution to the poker problem from coder dojo
 *Two poker hands with 5 cards*
 
         $ ./poker "Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C AH"
-        White wins - High Card
+        White wins - High Card: A
 
 *Multiple poker hands with 5 cards*
 
@@ -22,7 +22,7 @@ This is a solution to the poker problem from coder dojo
 
 *Multiple poker hands with more than 5 cards*
 
-        $ ./poker "Black: 2C JC 3H JD 3S JS 2D White: QH QD 10D JD QD KD AD"
+        $ ./poker "Black: 2C JC 3H JD 3S JS 2D White: QH QD TD JD QD KD AD"
         White wins - Straight Flush
 
 *Multiple poker hands in Texas Hold'em style of poker*
