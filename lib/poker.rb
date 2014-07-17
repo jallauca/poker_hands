@@ -125,7 +125,7 @@ module Poker
 
   def four_of_kind_score(cards, ranks, set)
     four_of_kind = set.find { |c| ranks.count(c) == 4 }
-    [8, four_of_kind] if set.find { |c| ranks.count(c) == 4 }
+    [8, four_of_kind] if four_of_kind
   end
 
   def full_house_score(cards, ranks, set)
@@ -145,7 +145,7 @@ module Poker
 
   def three_of_kind_score(cards, ranks, set)
     three_of_kind = set.find { |c| ranks.count(c) == 3 }
-    [4, three_of_kind] if set.find { |c| ranks.count(c) == 3 }
+    [4, three_of_kind] if three_of_kind
   end
 
   def two_pair_score(cards, ranks, set)
