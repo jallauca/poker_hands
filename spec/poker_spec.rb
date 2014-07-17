@@ -110,6 +110,17 @@ describe Poker do
     end
   end
 
+  it "determines winner between two players in Texas Hold'em" do
+    hands_winners = [
+      ["House: QH QD JC 3H JD Black: JH QS White: 2S TS", "Black wins - Full House"],
+      ["House: QH QD JC 3H JD Black: 3S TS White: KD AD", "White wins - Two Pairs High Card: A"],
+    ]
+
+    hands_winners.each do |(h, w)|
+      expect( Poker.find_winner(h) ).to eq( w )
+    end
+  end
+
   it "get_play_score_tests" do
     expect( Poker.send(:get_play_score, [ '2H','3H','4H','5H','6H' ]) ).to eq( [9,6,     5,4,3,2] )
     expect( Poker.send(:get_play_score, [ '2H','4H','4D','4S','4C' ]) ).to eq( [8,4,     4,4,4,4,2] )

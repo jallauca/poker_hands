@@ -33,6 +33,7 @@ module Poker
   end
 
   def best_hand_combination(hands)
+    hands = handle_texas_hold_em(hands)
     hands.reduce({ }) do |hash, (hand, cards)|
       _, _, best_cards = cards
                         .combination(5)
@@ -156,6 +157,12 @@ module Poker
   def pair_score(cards, ranks, set)
     pair = set.find_all { |c| ranks.count(c) == 2 }
     [2] + pair if pair.count == 1
+  end
+
+  def handle_texas_hold_em(hands)
+    house = hands.delete("House")
+    hands.each { |hand, cards| hands[hand] = cards + house } if house
+    hands
   end
 
   end
