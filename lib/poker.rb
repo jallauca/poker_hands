@@ -80,17 +80,17 @@ module Poker
     ranks = get_ranks(cards)
     set = Set.new(ranks)
 
-    play_score = straight_flush_score(cards, ranks, set) ||
-                 four_of_kind_score(cards, ranks, set) ||
-                 full_house_score(cards, ranks, set) ||
-                 flush_score(cards, ranks, set) ||
-                 straight_score(cards, ranks, set) ||
-                 three_of_kind_score(cards, ranks, set) ||
-                 two_pair_score(cards, ranks, set) ||
-                 pair_score(cards, ranks, set) ||
+    play_ranking = straight_flush_ranking(cards, ranks, set) ||
+                 four_of_kind_ranking(cards, ranks, set) ||
+                 full_house_ranking(cards, ranks, set) ||
+                 flush_ranking(cards, ranks, set) ||
+                 straight_ranking(cards, ranks, set) ||
+                 three_of_kind_ranking(cards, ranks, set) ||
+                 two_pair_ranking(cards, ranks, set) ||
+                 pair_ranking(cards, ranks, set) ||
                  [1]
 
-    return play_score + ranks
+    return play_ranking + ranks
   end
 
   def indexed_cards
@@ -102,8 +102,8 @@ module Poker
     indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   end
 
-  def ranked_plays
-    @ranked_plays ||=
+  def rankings
+    @rankings ||=
       ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
        "Full House","Four of a Kind","Straight Flush"]
   end
@@ -115,46 +115,46 @@ module Poker
   end
 
   def get_play_label(score)
-     ranked_plays[score[0]]
+     rankings[score[0]]
   end
 
-  def straight_flush_score(cards, ranks, set)
-    score1 = straight_score(cards, ranks, set)
-    score2 = flush_score(cards, ranks, set)
-    [9] if score1 && score2
+  def straight_flush_ranking(cards, ranks, set)
+    ranking1 = straight_ranking(cards, ranks, set)
+    ranking2 = flush_ranking(cards, ranks, set)
+    [9] if ranking1 && ranking2
   end
 
-  def four_of_kind_score(cards, ranks, set)
+  def four_of_kind_ranking(cards, ranks, set)
     four_of_kind = set.find { |c| ranks.count(c) == 4 }
     [8, four_of_kind] if four_of_kind
   end
 
-  def full_house_score(cards, ranks, set)
+  def full_house_ranking(cards, ranks, set)
     three_of_kind = set.find { |c| ranks.count(c) == 3 }
     two_of_kind = set.find { |c| ranks.count(c) == 2 }
     [7, three_of_kind, two_of_kind] if three_of_kind && two_of_kind
   end
 
-  def flush_score(cards, ranks, set)
+  def flush_ranking(cards, ranks, set)
     suits = Set.new( cards.map { |c| c[-1] } )
     [6] if suits.count == 1
   end
 
-  def straight_score(cards, ranks, set)
+  def straight_ranking(cards, ranks, set)
     [5] if set.count == 5 && (ranks[0] - ranks[-1]) == 4
   end
 
-  def three_of_kind_score(cards, ranks, set)
+  def three_of_kind_ranking(cards, ranks, set)
     three_of_kind = set.find { |c| ranks.count(c) == 3 }
     [4, three_of_kind] if three_of_kind
   end
 
-  def two_pair_score(cards, ranks, set)
+  def two_pair_ranking(cards, ranks, set)
     two_pairs = set.find_all { |c| ranks.count(c) == 2 }
     [3] + two_pairs.sort.reverse if two_pairs.count == 2
   end
 
-  def pair_score(cards, ranks, set)
+  def pair_ranking(cards, ranks, set)
     pair = set.find_all { |c| ranks.count(c) == 2 }
     [2] + pair if pair.count == 1
   end
