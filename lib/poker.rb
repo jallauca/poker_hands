@@ -160,9 +160,10 @@ module Poker
   end
 
   def handle_texas_hold_em(hands)
-    house = hands.delete("House")
-    hands.each { |hand, cards| hands[hand] = cards + house } if house
-    hands
+    new_hands = hands.clone
+    house = new_hands.delete("House")
+    new_hands.each { |hand, cards| new_hands[hand] = cards + house } if house
+    new_hands
   end
 
   end
