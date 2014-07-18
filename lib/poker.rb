@@ -37,7 +37,7 @@ module Poker
     hands.reduce({ }) do |hash, (hand, cards)|
       _, _, best_cards = cards
                         .combination(5)
-                        .map { |c| [hand, get_play_score(c), c] }
+                        .map { |c| [hand, get_score(c), c] }
                         .max
       hash[hand] = best_cards
       hash
@@ -71,26 +71,26 @@ module Poker
 
   def get_scores(hands)
     hands.reduce({ }) do |memo, (name, cards)|
-      memo[name] = get_play_score(cards)
+      memo[name] = get_score(cards)
       memo
     end
   end
 
-  def get_play_score(cards)
+  def get_score(cards)
     ranks = get_ranks(cards)
     set = Set.new(ranks)
 
-    play_ranking = straight_flush_ranking(cards, ranks, set) ||
-                 four_of_kind_ranking(cards, ranks, set) ||
-                 full_house_ranking(cards, ranks, set) ||
-                 flush_ranking(cards, ranks, set) ||
-                 straight_ranking(cards, ranks, set) ||
-                 three_of_kind_ranking(cards, ranks, set) ||
-                 two_pair_ranking(cards, ranks, set) ||
-                 pair_ranking(cards, ranks, set) ||
-                 [1]
+    ranking = straight_flush_ranking(cards, ranks, set) ||
+              four_of_kind_ranking(cards, ranks, set) ||
+              full_house_ranking(cards, ranks, set) ||
+              flush_ranking(cards, ranks, set) ||
+              straight_ranking(cards, ranks, set) ||
+              three_of_kind_ranking(cards, ranks, set) ||
+              two_pair_ranking(cards, ranks, set) ||
+              pair_ranking(cards, ranks, set) ||
+              [1]
 
-    return play_ranking + ranks
+    return ranking + ranks
   end
 
   def indexed_cards
