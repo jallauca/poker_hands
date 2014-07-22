@@ -9,8 +9,17 @@ module Underscore
     end
   end
 
+  def self.methods_compose(context, *methods)
+    functions = methods.map { |m| context.method(m) }
+    compose *functions
+  end
+
   def self.compose_right(*functions)
     compose *(functions.reverse)
+  end
+
+  def self.methods_compose_right(context, *methods)
+    methods_compose(context, *(methods.reverse))
   end
 end
 
