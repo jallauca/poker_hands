@@ -2,9 +2,9 @@ require File.join(File.dirname(__FILE__), '../lib', 'poker')
 
 describe Poker do
 
-  it "input_to_hands should identify hands and respective list of cards" do
+  it "parse should identify hands and respective list of cards" do
     expect(
-      Poker.send(:input_to_hands,
+      Poker.send(:parse,
                  "Black: 2H 3D 5S TC KD White: 2C 3H 4S 8C AH")).to eq(
         {
           'Black' => [ '2H', '3D', '5S', 'TC', 'KD' ],
@@ -13,7 +13,7 @@ describe Poker do
       )
 
     expect(
-      Poker.send(:input_to_hands,
+      Poker.send(:parse,
                  "Black: 2H 4S 4C 2D 4H White: 2S 8S AS QS 3S")).to eq(
         {
           'Black' => [ '2H', '4S', '4C', '2D', '4H' ],
@@ -22,7 +22,7 @@ describe Poker do
       )
 
     expect(
-      Poker.send(:input_to_hands,
+      Poker.send(:parse,
                  "Black: 2H 3D 5S 9C KD White: 2C 3H 4S 8C KH Blue: 8C 9H JC QS KC")).to eq(
         {
           'Black' => [ '2H', '3D', '5S', '9C', 'KD' ],

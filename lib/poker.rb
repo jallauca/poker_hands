@@ -1,15 +1,20 @@
 require 'set'
+require 'underscore'
 
 module Poker
   class << self
 
   def find_winner(input)
-    winner( input_to_hands(input) )
+    poker_game = Underscore.methods_compose_right(self,
+        :parse, :validate, :combine_for_texas_hold_em,
+        :best_hand_combination, :get_scores,
+        :sort_hands, :get_winners)
+    poker_game[ input ]
   end
 
   private
 
-  def input_to_hands(input)
+  def parse(input)
     split_hands = input.scan(/\w+:(?:\s[0-9TAJKQ][HDSC])*/)
     split_hands.reduce({ }) do |hash, hand|
       name, cards = hand.split(":")
@@ -18,22 +23,12 @@ module Poker
     end
   end
 
-  def winner(hands)
-    hands = best_hand_combination(hands)
-    hand_scores = get_scores(hands)
-    desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
-    hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
-    first_hand, first_score = hands_by_score_desc.first
-
-    winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
-
-    return display_multiple(winners) if winners.count > 1
-
-    display_winner(hands_by_score_desc)
+  def validate(hands)
+    throw :invalid_hand_count unless hands.values.map(&:length).all? { |c| [2,5,7].include? c }
+    hands
   end
 
   def best_hand_combination(hands)
-    hands = handle_texas_hold_em(hands)
     hands.reduce({ }) do |hash, (hand, cards)|
       _, _, best_cards = cards
                         .combination(5)
@@ -44,6 +39,19 @@ module Poker
     end
   end
 
+  def sort_hands(hand_scores)
+    desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
+    hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
+  end
+
+  def get_winners(hands_by_score_desc)
+    first_hand, first_score = hands_by_score_desc.first
+    winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
+    return get_multiple_winners(winners) if winners.count > 1
+
+    get_winner(hands_by_score_desc)
+  end
+
   def find_high_card(first_score, second_score)
     return nil if first_score[0] > second_score[0]
     high_card, _ = first_score.each_with_index.find do |c, i|
@@ -52,12 +60,12 @@ module Poker
     high_card
   end
 
-  def display_multiple(winners)
+  def get_multiple_winners(winners)
     winners_string =  winners.map { |w| w[0] }.join(', ')
-    return "#{winners_string} - Tie"
+    "#{winners_string} - Tie"
   end
 
-  def display_winner(hands_by_score_desc)
+  def get_winner(hands_by_score_desc)
     first_hand, first_score = hands_by_score_desc.first
     second_score = hands_by_score_desc[1][1]
     high_card = find_high_card(first_score, second_score)
@@ -159,7 +167,7 @@ module Poker
     [2] + pair if pair.count == 1
   end
 
-  def handle_texas_hold_em(hands)
+  def combine_for_texas_hold_em(hands)
     new_hands = hands.clone
     house = new_hands.delete("House")
     new_hands.each { |hand, cards| new_hands[hand] = cards + house } if house
