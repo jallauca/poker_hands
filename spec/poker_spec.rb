@@ -32,6 +32,16 @@ describe Poker do
       )
   end
 
+  it "throws an exception if validation does not pass" do
+    hands_winners = [
+      ["Black: 2C JC 3H JD 3S JS 2D TH White: QH QD TS JH QD KS AC"],
+      ["Black: 2C JC 3H JD 3S JS White: QH QD TD JD QD KD AD"],
+    ]
+    hands_winners.each do |(h, w)|
+      expect { Poker.find_winner(h) }.to raise_exception(ArgumentError, "Invalid hand count")
+    end
+  end
+
   it "determines winner between two players" do
     hands_winners = [
       ["Black: 2H 3H 4H 5H 6H White: 3C 3H 4S 8C AH",

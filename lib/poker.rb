@@ -24,7 +24,8 @@ module Poker
   end
 
   def validate(hands)
-    throw :invalid_hand_count unless hands.values.map(&:length).all? { |c| [2,5,7].include? c }
+    valid_hands = hands.values.map(&:length).all? { |c| [2,5,7].include? c }
+    raise ArgumentError, "Invalid hand count" unless valid_hands
     hands
   end
 
