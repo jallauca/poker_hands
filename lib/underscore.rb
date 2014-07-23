@@ -4,7 +4,7 @@ module Underscore
   end
 
   def self.compose(*functions)
-    lambda do |*args|
+    ->(*args) do
       result = functions[-1][*args]
       functions[0..-2].reverse.each do |f|
         result = f[result]
