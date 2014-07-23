@@ -92,7 +92,7 @@ module Poker
     ranks = get_ranks(cards)
     set = Set.new(ranks)
 
-    ranking = Underscore.methods_dispatch(self,
+    ranking_dispatcher = Underscore.methods_dispatch(self,
                 :straight_flush_ranking,
                 :four_of_kind_ranking,
                 :full_house_ranking,
@@ -103,7 +103,7 @@ module Poker
                 :pair_ranking,
                 :high_card_ranking)
 
-    return ranking[cards, ranks, set] + ranks
+    return ranking_dispatcher[cards, ranks, set] + ranks
   end
 
   def get_ranks(cards)
