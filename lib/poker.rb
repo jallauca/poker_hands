@@ -4,6 +4,9 @@ require 'underscore'
 module Poker
   class << self
 
+  INDEXED_CARDS = Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
+  INDEXED_CARDS_INVERSE = INDEXED_CARDS.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
+
   def find_winner(input)
     poker_game = Underscore.methods_compose_right(self,
         :parse, :validate, :combine_for_texas_hold_em,
@@ -72,7 +75,7 @@ module Poker
 
     solution = "#{first_hand} wins -"
     solution += " #{play_label}" if play_label.length > 0
-    solution += " High Card: #{indexed_cards_inverse[high_card]}" if high_card
+    solution += " High Card: #{INDEXED_CARDS_INVERSE[high_card]}" if high_card
     solution
   end
 
@@ -100,14 +103,7 @@ module Poker
     return ranking + ranks
   end
 
-  def indexed_cards
-    @indexed_cards ||=
-      Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
-  end
 
-  def indexed_cards_inverse
-    indexed_cards.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
-  end
 
   def rankings
     @rankings ||=
@@ -116,7 +112,7 @@ module Poker
   end
 
   def get_ranks(cards)
-    cards = cards.map { |c| indexed_cards[ c[0..-2] ] }.sort.reverse
+    cards = cards.map { |c| INDEXED_CARDS[ c[0..-2] ] }.sort.reverse
     return [5,4,3,2,1] if cards == [14,5,4,3,2]
     cards
   end
