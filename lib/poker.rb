@@ -4,12 +4,12 @@ require 'underscore'
 module Poker
   class << self
 
-  attr_reader :poker_game, :ranking_dispatcher
-
   INDEXED_CARDS = Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   INDEXED_CARDS_INVERSE = INDEXED_CARDS.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   RANKINGS = ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
               "Full House","Four of a Kind","Straight Flush"]
+
+  attr_reader :poker_game, :ranking_dispatcher
 
   def find_winner(input)
     poker_game[ input ]
