@@ -2,11 +2,11 @@ require File.join(File.dirname(__FILE__), '../lib', 'underscore')
 
 describe Underscore do
   context "lambdas" do
-    let(:name) { lambda { "Alicia" } }
-    let(:greet) { lambda { |name| "Hello, #{name}!" } }
-    let(:goodbye) { lambda { |intro| "#{intro} Good bye!" } }
-    let(:name_with_args) { lambda { |x| x } }
-    let(:name_with_two_args) { lambda { |n, ln| "#{n} #{ln}" } }
+    let(:name) { -> { "Alicia" } }
+    let(:greet) { ->(name) { "Hello, #{name}!" } }
+    let(:goodbye) { ->(intro) { "#{intro} Good bye!" } }
+    let(:name_with_args) { ->(x) { x } }
+    let(:name_with_two_args) { ->(n, ln) { "#{n} #{ln}" } }
 
     it "compose one function" do
       composition = Underscore.compose(name)
