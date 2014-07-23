@@ -40,7 +40,7 @@ module Poker
 
   def sort_hands(hand_scores)
     desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
-    hands_by_score_desc = hand_scores.sort( & desc_hand_comparison )
+    hands_by_score_desc = hand_scores.sort(&desc_hand_comparison)
   end
 
   def get_winners(hands_by_score_desc)
