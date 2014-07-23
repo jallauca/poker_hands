@@ -34,6 +34,13 @@ module Poker
     hands
   end
 
+  def combine_for_texas_hold_em(hands)
+    new_hands = hands.clone
+    house = new_hands.delete("House")
+    new_hands.each { |hand, cards| new_hands[hand] = cards + house } if house
+    new_hands
+  end
+
   def best_hand_combination(hands)
     card_by_score = ->(c) { [get_score(c), c] }
     hands.reduce({ }) do |hash, (hand, cards)|
@@ -43,42 +50,12 @@ module Poker
     end
   end
 
-  def sort_hands(hand_scores)
-    desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
-    hands_by_score_desc = hand_scores.sort(&desc_hand_comparison)
-  end
-
-  def get_winners(hands_by_score_desc)
-    first_hand, first_score = hands_by_score_desc.first
-    winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
-    return get_multiple_winners(winners) if winners.count > 1
-
-    get_winner(hands_by_score_desc)
-  end
-
   def find_high_card(first_score, second_score)
     return nil if first_score[0] > second_score[0]
     high_card, _ = first_score.each_with_index.find do |c, i|
       c > second_score[i] && i > 0
     end
     high_card
-  end
-
-  def get_multiple_winners(winners)
-    winners_string =  winners.map { |w| w[0] }.join(', ')
-    "#{winners_string} - Tie"
-  end
-
-  def get_winner(hands_by_score_desc)
-    first_hand, first_score = hands_by_score_desc.first
-    second_score = hands_by_score_desc[1][1]
-    high_card = find_high_card(first_score, second_score)
-    play_label = get_play_label(first_score)
-
-    solution = "#{first_hand} wins -"
-    solution += " #{play_label}" if play_label.length > 0
-    solution += " High Card: #{INDEXED_CARDS_INVERSE[high_card]}" if high_card
-    solution
   end
 
   def get_scores(hands)
@@ -108,10 +85,6 @@ module Poker
     cards = cards.map { |c| INDEXED_CARDS[ c[0..-2] ] }.sort.reverse
     return [5,4,3,2,1] if cards == [14,5,4,3,2]
     cards
-  end
-
-  def get_play_label(score)
-     RANKINGS[score[0]]
   end
 
   def straight_flush_ranking(cards, ranks, set)
@@ -159,11 +132,38 @@ module Poker
     [1]
   end
 
-  def combine_for_texas_hold_em(hands)
-    new_hands = hands.clone
-    house = new_hands.delete("House")
-    new_hands.each { |hand, cards| new_hands[hand] = cards + house } if house
-    new_hands
+  def sort_hands(hand_scores)
+    desc_hand_comparison = ->(h1, h2) { h2[1] <=> h1[1] }
+    hands_by_score_desc = hand_scores.sort(&desc_hand_comparison)
+  end
+
+  def get_winners(hands_by_score_desc)
+    first_hand, first_score = hands_by_score_desc.first
+    winners = hands_by_score_desc.take_while { |hand, score| score == first_score }
+    return get_multiple_winners(winners) if winners.count > 1
+
+    get_winner(hands_by_score_desc)
+  end
+
+  def get_multiple_winners(winners)
+    winners_string =  winners.map { |w| w[0] }.join(', ')
+    "#{winners_string} - Tie"
+  end
+
+  def get_winner(hands_by_score_desc)
+    first_hand, first_score = hands_by_score_desc.first
+    second_score = hands_by_score_desc[1][1]
+    high_card = find_high_card(first_score, second_score)
+    play_label = get_play_label(first_score)
+
+    solution = "#{first_hand} wins -"
+    solution += " #{play_label}" if play_label.length > 0
+    solution += " High Card: #{INDEXED_CARDS_INVERSE[high_card]}" if high_card
+    solution
+  end
+
+  def get_play_label(score)
+     RANKINGS[score[0]]
   end
 
   end
