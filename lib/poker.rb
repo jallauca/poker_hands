@@ -92,17 +92,18 @@ module Poker
     ranks = get_ranks(cards)
     set = Set.new(ranks)
 
-    ranking = straight_flush_ranking(cards, ranks, set) ||
-              four_of_kind_ranking(cards, ranks, set) ||
-              full_house_ranking(cards, ranks, set) ||
-              flush_ranking(cards, ranks, set) ||
-              straight_ranking(cards, ranks, set) ||
-              three_of_kind_ranking(cards, ranks, set) ||
-              two_pair_ranking(cards, ranks, set) ||
-              pair_ranking(cards, ranks, set) ||
-              [1]
+    ranking = Underscore.methods_dispatch(self,
+                :straight_flush_ranking,
+                :four_of_kind_ranking,
+                :full_house_ranking,
+                :flush_ranking,
+                :straight_ranking,
+                :three_of_kind_ranking,
+                :two_pair_ranking,
+                :pair_ranking,
+                :high_card_ranking)
 
-    return ranking + ranks
+    return ranking[cards, ranks, set] + ranks
   end
 
   def get_ranks(cards)
@@ -154,6 +155,10 @@ module Poker
   def pair_ranking(cards, ranks, set)
     pair = set.find_all { |c| ranks.count(c) == 2 }
     [2] + pair if pair.count == 1
+  end
+
+  def high_card_ranking(cards, ranks, set)
+    [1]
   end
 
   def combine_for_texas_hold_em(hands)
