@@ -30,11 +30,9 @@ module Poker
   end
 
   def best_hand_combination(hands)
+    card_by_score = lambda { |c| [get_score(c), c] }
     hands.reduce({ }) do |hash, (hand, cards)|
-      _, _, best_cards = cards
-                        .combination(5)
-                        .map { |c| [hand, get_score(c), c] }
-                        .max
+      _, best_cards = cards.combination(5).map(&card_by_score).max
       hash[hand] = best_cards
       hash
     end
