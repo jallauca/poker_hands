@@ -4,17 +4,22 @@ require 'underscore'
 module Poker
   class << self
 
+  attr_reader :poker_game, :ranking_dispatcher
+
   INDEXED_CARDS = Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   INDEXED_CARDS_INVERSE = INDEXED_CARDS.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
   RANKINGS = ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
               "Full House","Four of a Kind","Straight Flush"]
 
   def find_winner(input)
-    poker_game = Underscore.methods_compose_right(self,
-        :parse, :validate, :combine_for_texas_hold_em,
-        :best_hand_combination, :get_scores,
-        :sort_hands, :get_winners)
     poker_game[ input ]
+  end
+
+  def poker_game
+    @poker_game ||= Underscore.methods_compose_right(self,
+      :parse, :validate, :combine_for_texas_hold_em,
+      :best_hand_combination, :get_scores,
+      :sort_hands, :get_winners)
   end
 
   private
@@ -68,17 +73,14 @@ module Poker
   def get_score(cards)
     ranks = get_ranks(cards)
     set = Set.new(ranks)
-    ranking_dispatcher = Underscore.methods_dispatch(self,
-                :straight_flush_ranking,
-                :four_of_kind_ranking,
-                :full_house_ranking,
-                :flush_ranking,
-                :straight_ranking,
-                :three_of_kind_ranking,
-                :two_pair_ranking,
-                :pair_ranking,
-                :high_card_ranking)
     return ranking_dispatcher[cards, ranks, set] + ranks
+  end
+
+  def ranking_dispatcher
+    @ranking_dispatcher ||= Underscore.methods_dispatch(self,
+      :straight_flush_ranking, :four_of_kind_ranking, :full_house_ranking,
+      :flush_ranking, :straight_ranking, :three_of_kind_ranking,
+      :two_pair_ranking, :pair_ranking, :high_card_ranking)
   end
 
   def get_ranks(cards)
