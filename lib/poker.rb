@@ -6,6 +6,8 @@ module Poker
 
   INDEXED_CARDS = Hash[ "--23456789TJQKA".chars.each_with_index.map { |n, i| [n, i] } ]
   INDEXED_CARDS_INVERSE = INDEXED_CARDS.reduce({ }) { |hash, (k, v)| hash[v] = k; hash }
+  RANKINGS = ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
+              "Full House","Four of a Kind","Straight Flush"]
 
   def find_winner(input)
     poker_game = Underscore.methods_compose_right(self,
@@ -103,14 +105,6 @@ module Poker
     return ranking + ranks
   end
 
-
-
-  def rankings
-    @rankings ||=
-      ["","","Pair","Two Pairs","Three of a Kind","Straight","Flush",
-       "Full House","Four of a Kind","Straight Flush"]
-  end
-
   def get_ranks(cards)
     cards = cards.map { |c| INDEXED_CARDS[ c[0..-2] ] }.sort.reverse
     return [5,4,3,2,1] if cards == [14,5,4,3,2]
@@ -118,7 +112,7 @@ module Poker
   end
 
   def get_play_label(score)
-     rankings[score[0]]
+     RANKINGS[score[0]]
   end
 
   def straight_flush_ranking(cards, ranks, set)
