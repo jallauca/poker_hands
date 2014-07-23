@@ -120,4 +120,42 @@ describe Underscore do
       expect { composition[ "Alicia" ] }.to raise_error
     end
   end
+
+  context "dispatch" do
+    let(:k_true) { ->{  true } }
+    let(:k_false) { ->{  false } }
+    let(:k_nil) { ->{  nil } }
+    let(:k_empty_array) { ->{  [] } }
+    let(:k_array) { ->{  ["a", "b", "c"] } }
+    let(:k_string) { ->{  "test" } }
+    let(:k_n) { ->{ 0 } }
+
+    it "dispatches first function that returns truthy" do
+      dispatcher = Underscore.dispatch(k_true)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.dispatch(k_false, k_true)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.dispatch(k_false, k_true, k_nil)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.dispatch(k_false, k_empty_array, k_true, k_nil)
+      expect( dispatcher[] ).to eq([])
+
+      dispatcher = Underscore.dispatch(k_false, k_array, k_true)
+      expect( dispatcher[] ).to eq( k_array[] )
+
+      dispatcher = Underscore.dispatch(k_false, k_array, k_true)
+      expect( dispatcher[] ).to eq( k_array[] )
+    end
+
+    it "returns nil if no function returns truthy" do
+      dispatcher = Underscore.dispatch(k_false)
+      expect( dispatcher[] ).to be_nil
+
+      dispatcher = Underscore.dispatch(k_false, k_nil)
+      expect( dispatcher[] ).to be_nil
+    end
+  end
 end

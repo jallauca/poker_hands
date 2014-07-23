@@ -21,6 +21,16 @@ module Underscore
   def self.methods_compose_right(context, *methods)
     methods_compose(context, *(methods.reverse))
   end
+
+  def self.dispatch(*functions)
+    ->(*args) do
+      functions.each do |f|
+        result = f[*args]
+        return result if result
+      end
+      nil
+    end
+  end
 end
 
 class Proc
