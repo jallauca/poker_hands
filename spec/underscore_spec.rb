@@ -121,14 +121,12 @@ describe Underscore do
     end
   end
 
-  context "dispatch" do
+  context "dispatch lambdas" do
     let(:k_true) { ->{  true } }
     let(:k_false) { ->{  false } }
     let(:k_nil) { ->{  nil } }
     let(:k_empty_array) { ->{  [] } }
     let(:k_array) { ->{  ["a", "b", "c"] } }
-    let(:k_string) { ->{  "test" } }
-    let(:k_n) { ->{ 0 } }
 
     it "dispatches first function that returns truthy" do
       dispatcher = Underscore.dispatch(k_true)
@@ -155,6 +153,46 @@ describe Underscore do
       expect( dispatcher[] ).to be_nil
 
       dispatcher = Underscore.dispatch(k_false, k_nil)
+      expect( dispatcher[] ).to be_nil
+    end
+  end
+
+  context "dispatch methods" do
+    before do
+      class TestObject
+        def self.k_true() true end
+        def self.k_false() false end
+        def self.k_nil() nil end
+        def self.k_empty_array() [] end
+        def self.k_array() ["a", "b", "c"] end
+      end
+    end
+
+    it "dispatches first function that returns truthy" do
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_true)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_true)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_true, :k_nil)
+      expect( dispatcher[] ).to be true
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_empty_array, :k_true, :k_nil)
+      expect( dispatcher[] ).to eq([])
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_array, :k_true)
+      expect( dispatcher[] ).to eq( TestObject.k_array )
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_array, :k_true)
+      expect( dispatcher[] ).to eq( TestObject.k_array )
+    end
+
+    it "returns nil if no function returns truthy" do
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false)
+      expect( dispatcher[] ).to be_nil
+
+      dispatcher = Underscore.methods_dispatch(TestObject, :k_false, :k_nil)
       expect( dispatcher[] ).to be_nil
     end
   end

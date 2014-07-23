@@ -34,6 +34,10 @@ module Underscore
       nil
     end
   end
+
+  def self.methods_dispatch(context, *methods)
+    dispatch *methods(context, *methods)
+  end
 end
 
 class Proc
