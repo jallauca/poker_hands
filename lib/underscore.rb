@@ -1,4 +1,8 @@
 module Underscore
+  def self.methods(context, *methods)
+    methods.map { |m| context.method(m) }
+  end
+
   def self.compose(*functions)
     lambda do |*args|
       result = functions[-1][*args]
@@ -9,13 +13,12 @@ module Underscore
     end
   end
 
-  def self.methods_compose(context, *methods)
-    functions = methods.map { |m| context.method(m) }
-    compose *functions
+  def self.compose_right(*functions)
+    compose *functions.reverse
   end
 
-  def self.compose_right(*functions)
-    compose *(functions.reverse)
+  def self.methods_compose(context, *methods)
+    compose *methods(context, *methods)
   end
 
   def self.methods_compose_right(context, *methods)
