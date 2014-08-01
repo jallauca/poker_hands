@@ -13,6 +13,7 @@ GEM
 
 PLATFORMS
   java
+  ruby
 
 DEPENDENCIES
   rspec (~> 2.14.0)
