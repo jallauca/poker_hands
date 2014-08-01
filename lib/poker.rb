@@ -16,9 +16,11 @@ module Poker
   end
 
   def poker_game
-    input = Underscore.methods_compose_right(self, :parse, :validate, :combine_for_texas_hold_em)
-    process = Underscore.methods_compose_right(self, :best_hand_combination, :get_scores)
-    output = Underscore.methods_compose_right(self, :sort_hands, :get_winners)
+    m_compose = ->(*args) { Underscore.methods_compose_right(self, *args) }
+
+    input = m_compose[ :parse, :validate, :combine_for_texas_hold_em ]
+    process = m_compose[ :best_hand_combination, :get_scores ]
+    output = m_compose[ :sort_hands, :get_winners ]
     @poker_game ||= Underscore.compose_right(input, process, output)
   end
 
